@@ -65,4 +65,9 @@ def output_y(t, y1, y2):
 
 
 if __name__=="__main__":
-    pass
+    data_array = []
+    y_array = []
+    for t in range(1400):
+        data_row = [input_I(t), input_u(t), output_y(t,0,0)]
+        data_array.append(data_row)
+    print("finished")
