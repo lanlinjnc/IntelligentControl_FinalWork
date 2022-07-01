@@ -5,7 +5,7 @@
 
 
 import numpy as np
-import torch
+import matplotlib.pyplot as plt
 
 
 
@@ -15,10 +15,12 @@ def input_I(t):
     :return: 系统输入I，0时刻之前为0
     """
     I = 0.0
-    if -2 <= t <= 1400:
+    if -2 <= t < 0:
+        I = 0.0
+    elif 0 <= t <= 1400:
         I = np.sin(np.pi * t / 1400)
     else:
-        print("时间范围错误")
+        print("I(t)时间范围错误")
     return I
 
 
@@ -39,7 +41,7 @@ def input_u(t):
     elif 1052 < t <= 1400:
         u = 0.25
     else:
-        print("时间范围错误")
+        print("u(t)时间范围错误")
 
     return u
 
@@ -63,11 +65,44 @@ def output_y(t, y1, y2):
     return y
 
 
+data_array = []
+y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
+t = 0.0
+while t < 1400.5:
+    y_t = output_y(t,y_before[2],y_before[0])  # y_befor[0]代表t-2
+    data_row = [t, input_I(t), input_u(t), y_t]
+    data_array.append(data_row)
+    y_before.pop(0)
+    y_before.append(y_t)
+    t += 0.5
+dataset = np.array(data_array)
+
 
 if __name__=="__main__":
-    data_array = []
-    y_array = []
-    for t in range(1400):
-        data_row = [input_I(t), input_u(t), output_y(t,0,0)]
-        data_array.append(data_row)
+    # data_array = []
+    # y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
+    # t = 0.0
+    # while t < 1400.5:
+    #     y_t = output_y(t,y_before[2],y_before[0])  # y_befor[0]代表t-2
+    #     data_row = [t, input_I(t), input_u(t), y_t]
+    #     data_array.append(data_row)
+    #     y_before.pop(0)
+    #     y_before.append(y_t)
+    #     t += 0.5
+    # dataset = np.array(data_array)
+
+    fontsize = 15
+    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(15, 12), sharex=True)
+    ax1.plot(dataset[:,0], dataset[:,1])
+    ax1.set_ylabel("input_I(t)", fontsize=fontsize)
+    ax1.set_title("function_figure", fontsize="xx-large")
+    ax2.plot(dataset[:,0], dataset[:,2])
+    ax2.set_ylabel("input_u(t)", fontsize=fontsize)
+    ax3.plot(dataset[:,0], dataset[:,3])
+    ax3.set_ylabel("output_y(t)", fontsize=fontsize)
+    ax3.set_xlabel("t/s", fontsize=fontsize)
+    plt.tight_layout()
+    plt.savefig('function_figure.png')
+    plt.show()
+
     print("finished")
