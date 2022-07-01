@@ -39,7 +39,7 @@ def input_u(t):
     elif 877 < t <= 1052:
         u = 0.25
     elif 1052 < t <= 1400:
-        u = 0.25
+        u = 0.175
     else:
         print("u(t)时间范围错误")
 
@@ -67,7 +67,7 @@ def output_y(t, y1, y2):
 
 data_array = []
 y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
-t = 0.0
+t = 0.0  # 共2801个数据对
 while t < 1400.5:
     y_t = output_y(t,y_before[2],y_before[0])  # y_befor[0]代表t-2
     data_row = [t, input_I(t), input_u(t), y_t]
@@ -75,7 +75,28 @@ while t < 1400.5:
     y_before.pop(0)
     y_before.append(y_t)
     t += 0.5
+
 dataset = np.array(data_array)
+
+# 随机生成2000训练集和400测试集
+data_index = [i for i in range(0,2801)]
+used_data_index = np.random.choice(data_index, 2400, replace=False)
+used_test_index = np.random.choice(used_data_index, 400, replace=False)
+data_train = []
+data_test = []
+for i in range(0, 2801):
+    data_temp = data_array[i]
+    if data_temp==[]:
+        print("数组为空")
+    if i in used_test_index:
+        data_test.append(data_temp)
+    elif i in used_data_index:
+        data_train.append(data_temp)
+    else:
+        continue
+
+data_train = np.array(data_train)
+data_test = np.array(data_test)
 
 
 if __name__=="__main__":
@@ -105,4 +126,4 @@ if __name__=="__main__":
     plt.savefig('function_figure.png')
     plt.show()
 
-    print("finished")
+    print("dataset finished")
