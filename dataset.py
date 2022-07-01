@@ -100,17 +100,6 @@ data_test = np.array(data_test)
 
 
 if __name__=="__main__":
-    # data_array = []
-    # y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
-    # t = 0.0
-    # while t < 1400.5:
-    #     y_t = output_y(t,y_before[2],y_before[0])  # y_befor[0]代表t-2
-    #     data_row = [t, input_I(t), input_u(t), y_t]
-    #     data_array.append(data_row)
-    #     y_before.pop(0)
-    #     y_before.append(y_t)
-    #     t += 0.5
-    # dataset = np.array(data_array)
 
     fontsize = 15
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(15, 12), sharex=True)

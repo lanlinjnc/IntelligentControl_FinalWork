@@ -4,7 +4,6 @@
 # @Author  : lanlin
 
 
-import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from dataset import data_train,data_test
