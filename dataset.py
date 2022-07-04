@@ -95,8 +95,8 @@ for i in range(0, 2801):
     else:
         continue
 
-data_train = np.array(data_train)
-data_test = np.array(data_test)
+data_train = np.array(data_train).astype(np.float32)
+data_test = np.array(data_test).astype(np.float32)
 
 
 if __name__=="__main__":

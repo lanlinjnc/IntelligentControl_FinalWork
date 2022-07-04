@@ -7,7 +7,8 @@
 import torch
 from torch import nn
 import numpy as np
-from dataset import data_train,data_test
+import matplotlib.pyplot as plt
+from dataset import data_train, data_test
 import matplotlib.pyplot as plt
 
 
