@@ -8,6 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+np.random.seed(20220705)
+
 
 def input_I(t):
     """
@@ -65,6 +67,7 @@ def output_y(t, y1, y2):
     return y
 
 
+
 data_array = []
 y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
 t = 0.0  # 共2801个数据对
@@ -76,11 +79,11 @@ while t < 1400.5:
     y_before.append(y_t)
     t += 0.5
 
-dataset = np.array(data_array)
+dataset = np.array(data_array).astype(np.float32)
 
 # 随机生成2000训练集和400测试集
 data_index = [i for i in range(0,2801)]
-used_data_index = np.random.choice(data_index, 2400, replace=False)
+used_data_index = np.random.choice(data_index, 2400, replace=False)  # 抽取坐标
 used_test_index = np.random.choice(used_data_index, 400, replace=False)
 data_train = []
 data_test = []
@@ -112,7 +115,7 @@ if __name__=="__main__":
     ax3.set_ylabel("output_y(t)", fontsize=fontsize)
     ax3.set_xlabel("t/s", fontsize=fontsize)
     plt.tight_layout()
-    plt.savefig('function_figure.png')
+    plt.savefig('./results/function_figure.png')
     plt.show()
 
     print("dataset finished")
