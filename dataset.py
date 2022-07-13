@@ -6,8 +6,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-
 np.random.seed(20220705)
 
 
@@ -66,8 +64,6 @@ def output_y(t, y1, y2):
 
     return y
 
-
-
 data_array = []
 y_before = [0.0, 0.0, 0.0, 0.0]  # 时间往左向后推进，每0.5秒一个值
 t = 0.0  # 共2801个数据对
@@ -103,6 +99,8 @@ data_test = np.array(data_test).astype(np.float32)
 
 
 if __name__=="__main__":
+
+    """ ---------------绘制函数输入输出图像--------------------------- """
 
     fontsize = 15
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(15, 12), sharex=True)
