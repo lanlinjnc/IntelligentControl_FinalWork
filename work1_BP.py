@@ -8,7 +8,7 @@ import torch
 import torch.nn.functional as Fun
 import numpy as np
 import matplotlib.pyplot as plt
-from dataset import data_train,data_test
+from dataset import dataset, data_train, data_test
 
 
 lr = 0.01  # 学习率
@@ -41,8 +41,6 @@ class BPNetModel(torch.nn.Module):
         x = Fun.relu(self.hiddden3(x))
         out = self.out(x)
 
-
-        # out = Fun.softmax(out, dim=1)  # 输出层采用softmax函数
         return out
 
 
@@ -95,6 +93,32 @@ if __name__ == "__main__":
     ax2.plot(test_loss_array)
     ax2.set_ylabel("test loss", fontsize=fontsize)
     ax2.set_xlabel("epochs", fontsize=fontsize)
+    plt.tight_layout()
+    plt.savefig('./results/' + fig_name + '.png')
+    plt.show()
+
+    # 与原y(t)图像对比
+    model = BPNetModel(n_feature=n_feature, hiddens=hiddens, n_output=n_output)
+    model.eval()
+    model_paras_path = './weights/BP_params.pth'
+    state_dict = torch.load(model_paras_path)
+    model.load_state_dict(state_dict)
+    x_all = torch.tensor(dataset[:, 0:3])
+    y_all = torch.tensor(dataset[:, -1]).unsqueeze(1)
+    BP_pre_all = model(x_all)
+    BP_loss = loss_fun(BP_pre_all, y_all)  # 预测值和真实值对比
+    print("全部数据的BP预测loss=", BP_loss.item())
+
+    fig_name = "BPNet_y"
+    fontsize = 15
+    x_range = dataset[:, 0]
+    true_y = dataset[:, -1]
+    pre_y = BP_pre_all.detach().numpy()[:, 0]
+    plt.xlabel("t/s")  # 给x轴起名字
+    plt.ylabel("y")  # 给y轴起名字
+    plt.plot(x_range, true_y, label='true_y(t)')
+    plt.plot(x_range, pre_y, label='BPnet_y(t)')
+    plt.legend()
     plt.tight_layout()
     plt.savefig('./results/' + fig_name + '.png')
     plt.show()
