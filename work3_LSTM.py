@@ -110,48 +110,48 @@ if __name__=="__main__":
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-2)
 
     """ ---------------------使用Mydataset类进行训练和测试-----------------------"""
-    # data_train = Mydataset(dataset, used_train_index)  # 训练集初始化
-    # train_loader = torch.utils.data.DataLoader(data_train, batch_size=batch_size)
-    #
-    # data_test = Mydataset(dataset, used_test_index)  # 测试集初始化
-    # test_loader = torch.utils.data.DataLoader(data_test, batch_size=400)
-    #
-    # data_test_rest = Mydataset(dataset, unused_data_index)  # 原始数据中剩余的数据集进行测试
-    # test_rest_loader = torch.utils.data.DataLoader(data_test_rest, batch_size=450)
-    # # 开始训练，并进行测试
-    # train_loss_record = []  # 保存训练数据
-    # test_loss_record = []  # 保存测试数据
-    # for i in range(epoch):
-    #     net.train()
-    #     loss_train_steps = 0.0
-    #     for j, (train_X, train_Y) in enumerate(train_loader):
-    #         # print(j)
-    #         train_X = train_X.to(device)
-    #         train_Y = train_Y.to(device)
-    #         out_train = net(train_X)  # [32,1,1]
-    #         loss_train = criterion(out_train, train_Y)  # [1,]
-    #         optimizer.zero_grad()
-    #         loss_train.backward()
-    #         optimizer.step()
-    #         loss_train_steps += loss_train.item()  # 保存loss
-    #     train_loss_record.append(loss_train_steps/(j+1))
-    #
-    #
-    #     # 开始测试
-    #     net = net.eval()
-    #     for j, (test_X, test_Y) in enumerate(test_loader):
-    #         test_X = test_X.to(device)
-    #         test_Y = test_Y.to(device)
-    #         out_test = net(test_X)  # [32,1,1]
-    #         loss_test = criterion(out_test, test_Y)  # [1,]
-    #         test_loss_record.append(loss_test.item())  # 保存loss
-    #
-    #     # 打印训练参数
-    #     if i % 100 == 0:
-    #         print('Epoch: {:4}, train Loss: {:.5f}, Test Loss: {:.5f}'
-    #               .format(i, loss_train_steps/(j+1), loss_test.item()))
-    #
-    # torch.save(net.state_dict(), './weights/LSTM_params.pth')
+    data_train = Mydataset(dataset, used_train_index)  # 训练集初始化
+    train_loader = torch.utils.data.DataLoader(data_train, batch_size=batch_size)
+
+    data_test = Mydataset(dataset, used_test_index)  # 测试集初始化
+    test_loader = torch.utils.data.DataLoader(data_test, batch_size=400)
+
+    data_test_rest = Mydataset(dataset, unused_data_index)  # 原始数据中剩余的数据集进行测试
+    test_rest_loader = torch.utils.data.DataLoader(data_test_rest, batch_size=450)
+    # 开始训练，并进行测试
+    train_loss_record = []  # 保存训练数据
+    test_loss_record = []  # 保存测试数据
+    for i in range(epoch):
+        net.train()
+        loss_train_steps = 0.0
+        for j, (train_X, train_Y) in enumerate(train_loader):
+            # print(j)
+            train_X = train_X.to(device)
+            train_Y = train_Y.to(device)
+            out_train = net(train_X)  # [32,1,1]
+            loss_train = criterion(out_train, train_Y)  # [1,]
+            optimizer.zero_grad()
+            loss_train.backward()
+            optimizer.step()
+            loss_train_steps += loss_train.item()  # 保存loss
+        train_loss_record.append(loss_train_steps/(j+1))
+
+
+        # 开始测试
+        net = net.eval()
+        for j, (test_X, test_Y) in enumerate(test_loader):
+            test_X = test_X.to(device)
+            test_Y = test_Y.to(device)
+            out_test = net(test_X)  # [32,1,1]
+            loss_test = criterion(out_test, test_Y)  # [1,]
+            test_loss_record.append(loss_test.item())  # 保存loss
+
+        # 打印训练参数
+        if i % 100 == 0:
+            print('Epoch: {:4}, train Loss: {:.5f}, Test Loss: {:.5f}'
+                  .format(i, loss_train_steps/(j+1), loss_test.item()))
+
+    torch.save(net.state_dict(), './weights/LSTM_params.pth')
     #
     # # 测试剩余的数据
     # # net_paras_path = './weights/LSTM_params.pth'
@@ -167,20 +167,20 @@ if __name__=="__main__":
     # #     print(loss_test.item())  # 保存loss
     # # out_test = out_test.cpu().squeeze(2).detach().numpy()
     # # test_Y = test_Y.cpu().squeeze(2).detach().numpy()
-    #
-    # """ ------------------------绘制损失函数和精度----------------------------"""
-    # fig_name = "LSTMNet"
-    # fontsize = 15
-    # fig, (ax1, ax2) = plt.subplots(2, figsize=(15, 12), sharex=True)
-    # ax1.plot(train_loss_record)
-    # ax1.set_ylabel("train loss", fontsize=fontsize)
-    # ax1.set_title(fig_name, fontsize="xx-large")
-    # ax2.plot(test_loss_record)
-    # ax2.set_ylabel("test loss", fontsize=fontsize)
-    # ax2.set_xlabel("epochs", fontsize=fontsize)
-    # plt.tight_layout()
-    # plt.savefig('./results/' + fig_name + '.png')
-    # plt.show()
+
+    """ ------------------------绘制损失函数和精度----------------------------"""
+    fig_name = "LSTMNet"
+    fontsize = 15
+    fig, (ax1, ax2) = plt.subplots(2, figsize=(15, 12), sharex=True)
+    ax1.plot(train_loss_record)
+    ax1.set_ylabel("train loss", fontsize=fontsize)
+    ax1.set_title(fig_name, fontsize="xx-large")
+    ax2.plot(test_loss_record)
+    ax2.set_ylabel("test loss", fontsize=fontsize)
+    ax2.set_xlabel("epochs", fontsize=fontsize)
+    plt.tight_layout()
+    plt.savefig('./results/' + fig_name + '.png')
+    plt.show()
 
     """ ------------------------利用所有数据与原始函数y对比----------------------------"""
     data_test_rest = Mydataset(dataset, unused_data_index)  # 原始数据中剩余的数据集进行测试
