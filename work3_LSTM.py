@@ -15,7 +15,7 @@ import torchvision.transforms as transforms
 
 batch_size = 2000
 time_step = 4  # 不大于400，否则报错
-epoch = 3000
+epoch = 2000
 input_size = 3
 output_size = 1
 mid_dim = 4
@@ -25,10 +25,10 @@ mid_layers = 2
 # 随机生成2000训练集和400测试集
 data_index = [i for i in range(dataset.shape[0]-time_step)]
 used_data_index = np.random.choice(data_index, 2400, replace=False)  # 抽取坐标
-unused_data_index = [i for i in data_index if i not in used_data_index]
 used_test_index = np.random.choice(used_data_index, 400, replace=False)
 used_train_index = [i for i in used_data_index if i not in used_test_index]
 used_train_index = np.array(used_train_index)
+unused_data_index = [i for i in data_index if i not in used_data_index]
 # for i in used_test_index:
 #     if i in used_train_index:
 #         print("error")
